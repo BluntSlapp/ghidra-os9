@@ -1,12 +1,34 @@
-workflow "Lint on push" {
-  on = "push"
-  resolves = ["Markdown lint", "Dockerfile lint"]
-}
 
-action "Markdown lint" {
-  uses = "bltavares/actions/mdlint@master"
-}
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
 
-action "Dockerfile lint" {
-  uses = "bltavares/actions/hadolint@master"
-}
+name: Publish Docker Image
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*.*.*'
+  # pull_request:
+  #   branches:
+  #     - 'master'
+
+jobs:
+  build:
+    name: Push Docker image to multiple registries
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      -
+        name: Markdown on Lint
+        uses: bltavares/actions/mdlint@master
+
+      -
+        name: Dockerfile Lint
+        uses: bltavares/actions/hadolint@master
+  
